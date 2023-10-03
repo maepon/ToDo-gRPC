@@ -4,15 +4,32 @@ package todo.v1;
 
 option go_package = "example.com/todo/gen/todo/v1;todov1";
 
+enum Status {
+  STATUS_TASK_UNSPECIFIED = 0;
+  STATUS_IMPORTANT = 1;
+  STATUS_LATER = 2;
+  STATUS_DONE = 3;
+}
+
 message ToDo {
   string id = 1;
+  // TODO: name required
   string name = 2;
-  string status = 3;
+  // TODO: add status enum
+  Status status = 3;
+}
+
+message ReadRequest {
+  string id = 1;
+}
+
+message ReadResponse {
+  ToDo todo = 1;
 }
 
 message CreateRequest {
   string name = 1;
-  string status = 2;
+  Status status = 2;
 }
 
 message CreateResponse {
@@ -21,7 +38,8 @@ message CreateResponse {
 
 message UpdateRequest {
   string id = 1;
-  string status = 2;
+  string name = 2;
+  Status status = 3;
 }
 
 message UpdateResponse {
@@ -36,6 +54,7 @@ message DeleteResponse {
 }
 
 service ToDoService {
+  rpc Read(ReadRequest) returns (ReadResponse) {}
   rpc Create(CreateRequest) returns (CreateResponse) {}
   rpc Update(UpdateRequest) returns (UpdateResponse) {}
   rpc Delete(DeleteRequest) returns (DeleteResponse) {}
